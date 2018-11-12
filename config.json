@@ -1,0 +1,9 @@
+{
+  "mqtt": {
+    "url": "mqtt://mqtt.thing.zone",
+    "username": "green",
+    "port": 1895
+  },
+
+  "thingyId": "myThingyId"
+}
