@@ -8,7 +8,7 @@ const Base64 = function Base64() {
   }
 
   this.decode = function (base64str, file) {
-    let data = new Buffer(base64str, 'base64');
+    let data = new Buffer.from(base64str, 'base64');
     fs.writeFileSync(file, data);
     console.log(`File ${file} written!`);
   }
