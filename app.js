@@ -30,15 +30,16 @@ client.on('error', e => {
 
 function onMessage(topic, message) {
   //TODO: Call code that puts image into folger './images'
-  exec('ffmpeg -loglevel panic -i rtsp://192.168.0.238:8080/video/h264 -vframes 1 "images/$(date +"%Y%m%d%H%M%S")_snapshot.png"', (err, stdout, stderr) => {
+  exec(`ffmpeg -loglevel error -i ${config.streamUrl} -vframes 1 "images/$(date +"%Y%m%d%H%M%S")_snapshot.png"`, (err, stdout, stderr) => {
   if (err) {
     // node couldn't execute the command
+    console.log('Image capture failed!');
+    console.log(err);
     return;
   }
-
-  // the *entire* stdout and stderr (buffered)
-  console.log(`stdout: ${stdout}`);
-  console.log(`stderr: ${stderr}`);
+  // // the *entire* stdout and stderr (buffered)
+  // console.log(`stdout: ${stdout}`);
+  // console.log(`stderr: ${stderr}`);
 });
 }
 
