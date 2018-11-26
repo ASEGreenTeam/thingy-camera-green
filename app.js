@@ -10,7 +10,8 @@ const { exec } = require('child_process');
 // Initialize watcher.
 var watcher = chokidar.watch('images', {
   ignored: /(^|[\/\\])\../,
-  persistent: true
+  persistent: true,
+  ignoreInitial: true,
 });
 
 // Something to use when events are received.
@@ -29,6 +30,7 @@ client.on('error', e => {
 
 
 function onMessage(topic, message) {
+  log('Snapshot command received!');
   //TODO: Call code that puts image into folger './images'
   exec(`ffmpeg -loglevel error -i ${config.streamUrl} -vframes 1 "images/$(date +"%Y%m%d%H%M%S")_snapshot.png"`, (err, stdout, stderr) => {
   if (err) {
@@ -62,11 +64,12 @@ watcher
 function fileAddedHandler(file) {
   data = base64.encode(file)
   client.publish(`${config.thingyId}/images/snapshot`, JSON.stringify({ filename: path.basename(file), data: data }));
+  log('Image published!')
 }
 
 
 const hostname = '127.0.0.1';
-const port = 3000;
+const port = 3001;
 
 const server = http.createServer((req, res) => {
   client.publish(`${config.thingyId}/images/take_snapshot`, 'someString');
