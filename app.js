@@ -31,18 +31,17 @@ client.on('error', e => {
 
 function onMessage(topic, message) {
   log('Snapshot command received!');
-  //TODO: Call code that puts image into folger './images'
-  exec(`ffmpeg -loglevel error -i ${config.streamUrl} -vframes 1 "images/$(date +"%Y%m%d%H%M%S")_snapshot.png"`, (err, stdout, stderr) => {
-  if (err) {
-    // node couldn't execute the command
-    console.log('Image capture failed!');
-    console.log(err);
-    return;
+  let i;
+  for (i = 0; i < 5; i++) {
+    exec(`ffmpeg -loglevel error -i ${config.streamUrl} -vframes 1 "images/$(date +"%Y%m%d%H%M%S")_snapshot.png"`, (err, stdout, stderr) => {
+      if (err) {
+        // node couldn't execute the command
+        console.log('Image capture failed!');
+        console.log(err);
+        return;
+      }
+    });
   }
-  // // the *entire* stdout and stderr (buffered)
-  // console.log(`stdout: ${stdout}`);
-  // console.log(`stderr: ${stderr}`);
-});
 }
 
 
