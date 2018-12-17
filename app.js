@@ -28,11 +28,16 @@ client.on('error', e => {
   log(e);
 });
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-function onMessage(topic, message) {
+
+async function onMessage(topic, message) {
   log('Snapshot command received!');
   let i;
   for (i = 0; i < 5; i++) {
+    await sleep(1000);
     exec(`ffmpeg -loglevel error -i ${config.streamUrl} -vframes 1 "images/$(date +"%Y%m%d%H%M%S")_snapshot.png"`, (err, stdout, stderr) => {
       if (err) {
         // node couldn't execute the command
